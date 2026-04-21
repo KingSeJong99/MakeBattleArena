@@ -114,6 +114,15 @@ AABCharacterPlayer::AABCharacterPlayer()
 	{
 		ChangeControlAction = ChangeControlActionRef.Object;
 	}
+	
+	static ConstructorHelpers::FObjectFinder<UInputAction> AttacckActionRef(
+		TEXT("/Game/ArenaBattle/Input/Actions/IA_Attack.IA_Attack")
+	);
+
+	if (AttacckActionRef.Succeeded())
+	{
+		AttackAction = AttacckActionRef.Object;
+	}
 
 	// 기본 컨트롤 설정.
 	CurrentCharacterControlType = ECharacterControlType::Shoulder;
@@ -180,6 +189,14 @@ void AABCharacterPlayer::SetupPlayerInputComponent(
 			ETriggerEvent::Started,
 			this,
 			&AABCharacterPlayer::ChangeCharacterControl
+		);
+		
+		// 공격 입력 액션을 처리합니다.
+		EnhancedInputComponent->BindAction(
+			AttackAction,
+			ETriggerEvent::Triggered,
+			this,
+			&AABCharacterPlayer::Attack
 		);
 	}
 }
@@ -318,4 +335,9 @@ void AABCharacterPlayer::QuarterMove(const FInputActionValue& Value)
 
 	// 이동 적용.
 	AddMovementInput(MoveDirection, MovementVectorSize);
+}
+
+void AABCharacterPlayer::Attack()
+{
+	ProcessComboCommand();
 }

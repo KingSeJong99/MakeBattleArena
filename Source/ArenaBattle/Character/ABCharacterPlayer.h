@@ -48,7 +48,11 @@ protected:
 	 */
 	void ShoulderMove(const FInputActionValue& Value);
 
+	/** 쿼터뷰일 떄의 이동을 처리합니다. */
 	void QuarterMove(const FInputActionValue& Value);
+	
+	// 공격함수.
+	void Attack();
 	
 	// --- 카메라 함수 ---
 	/**
@@ -92,6 +96,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = Input, BlueprintReadOnly)
 	TObjectPtr<UInputAction> ChangeControlAction;
+	
+	UPROPERTY(VisibleAnywhere, Category = Input, BlueprintReadOnly)
+	TObjectPtr<UInputAction> AttackAction;
 
 	/** 현재 사용 중인 캐릭터 컨트롤 타입 */
 	UPROPERTY(VisibleAnywhere, Category = CharacterControl)
