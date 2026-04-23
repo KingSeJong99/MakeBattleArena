@@ -18,9 +18,9 @@ AABCharacterPlayer::AABCharacterPlayer()
 {
 	// --- 기본 설정 ---
 	// 컨트롤러의 회전 값을 받아서 설정하는 옵션 비활성화.
-	bUseControllerRotationPitch = false; // Y축 회전.
-	bUseControllerRotationYaw = false; // Z축 회전.
-	bUseControllerRotationRoll = false; // X축 회전.
+	bUseControllerRotationPitch = false;	// Y축 회전.
+	bUseControllerRotationYaw = false;		// Z축 회전.
+	bUseControllerRotationRoll = false;		// X축 회전.
 
 	// 무브먼트 설정.
 	// 캐릭터가 이동하는 방향에 맞게 회전을 해주는 옵션.
@@ -28,32 +28,34 @@ AABCharacterPlayer::AABCharacterPlayer()
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.0f, 0.0f);
 	GetCharacterMovement()->JumpZVelocity = 800.0f;
 
+	/*
 	// 메시 컴포넌트 설정.
 	GetMesh()->SetRelativeLocationAndRotation(
-		FVector(0.0f, 0.0f, -88.0f),
-		FRotator(0.0f, -90.0f, 0.0f)
+	FVector(0.0f, 0.0f, -88.0f),
+	FRotator(0.0f, -90.0f, 0.0f)
 	);
 
 	// 메시 애셋 지정 (검색 필요함).
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> CharacterMesh(
-		TEXT("/Game/InfinityBladeWarriors/Character/CompleteCharacters/SK_CharM_Warrior.SK_CharM_Warrior")
+	TEXT("/Game/InfinityBladeWarriors/Character/CompleteCharacters/SK_CharM_Warrior.SK_CharM_Warrior")
 	);
 
 	// 로드 성공했으면 설정.
 	if (CharacterMesh.Succeeded())
 	{
-		GetMesh()->SetSkeletalMesh(CharacterMesh.Object);
+	GetMesh()->SetSkeletalMesh(CharacterMesh.Object);
 	}
 
 	// 애님 블루프린트 클래스 정보 지정.
 	static ConstructorHelpers::FClassFinder<UAnimInstance> CharacterAnim(
-		TEXT("/Game/ArenaBattle/Animation/ABP_ABCharacter.ABP_ABCharacter_C")
+	TEXT("/Game/ArenaBattle/Animation/ABP_ABCharacter.ABP_ABCharacter_C")
 	);
 
 	if (CharacterAnim.Succeeded())
 	{
-		GetMesh()->SetAnimInstanceClass(CharacterAnim.Class);
-	}
+	GetMesh()->SetAnimInstanceClass(CharacterAnim.Class);
+	} 
+	*/
 
 	// 컴포넌트 생성.
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(
@@ -114,14 +116,14 @@ AABCharacterPlayer::AABCharacterPlayer()
 	{
 		ChangeControlAction = ChangeControlActionRef.Object;
 	}
-	
-	static ConstructorHelpers::FObjectFinder<UInputAction> AttacckActionRef(
+
+	static ConstructorHelpers::FObjectFinder<UInputAction> AttackActionRef(
 		TEXT("/Game/ArenaBattle/Input/Actions/IA_Attack.IA_Attack")
 	);
 
-	if (AttacckActionRef.Succeeded())
+	if (AttackActionRef.Succeeded())
 	{
-		AttackAction = AttacckActionRef.Object;
+		AttackAction = AttackActionRef.Object;
 	}
 
 	// 기본 컨트롤 설정.
@@ -141,12 +143,13 @@ void AABCharacterPlayer::SetupPlayerInputComponent(
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	// 바인딩 - 향상된 입력 시스템 컴포넌트를 활용해서 설정.
+	// 향상된 입력 시스템 컴포넌트를 활용해 바인딩 합니다.
 	UEnhancedInputComponent* EnhancedInputComponent
 		= Cast<UEnhancedInputComponent>(PlayerInputComponent);
 	if (EnhancedInputComponent)
 	{
-		// 입력 바인딩 -> 이벤트와 실행 함수를 연결하는 과정.
+		// 입력 바인딩을 통해 이벤트와 실행 함수를 연결합니다.
+		 
 		EnhancedInputComponent->BindAction(
 			ShoulderMoveAction,
 			ETriggerEvent::Triggered,
@@ -190,7 +193,7 @@ void AABCharacterPlayer::SetupPlayerInputComponent(
 			this,
 			&AABCharacterPlayer::ChangeCharacterControl
 		);
-		
+
 		// 공격 입력 액션을 처리합니다.
 		EnhancedInputComponent->BindAction(
 			AttackAction,
@@ -204,29 +207,30 @@ void AABCharacterPlayer::SetupPlayerInputComponent(
 void AABCharacterPlayer::SetCharacterControl(
 	ECharacterControlType NewCharacterControlType)
 {
-	// 변경할 컨트롤 데이터 애셋 로드.
+	// 변경할 컨트롤 데이터 애셋을 로드.
 	UABCharacterControlData* NewCharacterControl
 		= CharacterControlManager[NewCharacterControlType];
-	// 필수로 있어야 하기 때문에 확인.
+	// 필수로 있어야 하므로 확인.
 	check(NewCharacterControl);
 
-	// 변경된 속성 설정.
+	// 변경된 속성을 설정.
 	SetCharacterContolData(NewCharacterControl);
 
-	// 입력 매핑 컨텍스트 설정.
-	// 사용할 입력 매핑 컨텍스트 지정.
-	// 다운 캐스팅.
+	/**
+	 * 입력 매핑 컨텍스트 설정.
+	 * 사용할 입력 매핑 컨텍스트를 지정합니다. (다운 캐스팅)
+	 */
 	APlayerController* PlayerController
 		= Cast<APlayerController>(GetController());
 	if (PlayerController)
 	{
-		// 향상된 입력 시스템의 서브 시스템 가져오기.
+		// 향상된 입력 시스템의 서브 시스템을 가져옵니다.
 		UEnhancedInputLocalPlayerSubsystem* InputSystem
 			= ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(
 				PlayerController->GetLocalPlayer()
 			);
 
-		// 향상된 입력 서브 시스템 얻어온 후에 사용할 매핑 컨텍스트 설정.
+		// 향상된 입력 서브 시스템을 얻어온 후에 사용할 매핑 컨텍스트 설정.
 		if (InputSystem)
 		{
 			// 기존에 설정된 매핑 제거.
@@ -283,11 +287,16 @@ void AABCharacterPlayer::ChangeCharacterControl()
 
 void AABCharacterPlayer::ShoulderMove(const FInputActionValue& Value)
 {
-	// 입력 값 읽어오기 ( 입력에 지정된 타입으로 변환 ).
+	/**
+	 * 입력 값 읽어오기.
+	 * 입력에 지정된 타입으로 변환합니다. 
+	 */
 	FVector2D Movement = Value.Get<FVector2D>();
 
-	// 이동할 방향 만들기.
-	// 카메라가 바라보는 방향 (컨트롤러의 방향)를 기준으로 방향 만들기.
+	/**
+	 * 이동할 방향 만들기. 
+	 * 카메라가 바라보는 방향 (컨트롤러의 방향)를 기준으로 방향을 만듭니다. 
+	 */
 	FRotator Rotation = GetControlRotation();
 	FRotator YawRotation(0.0f, Rotation.Yaw, 0.0f);
 
@@ -309,8 +318,9 @@ void AABCharacterPlayer::ShoulderLook(const FInputActionValue& Value)
 	// 입력 값 가져오기.
 	FVector2D RotationValue = Value.Get<FVector2D>();
 
-	// 회전 처리 (카메라 회전).
-	// 컨트롤러를 회전 시키면 스프링 암 컴포넌트가 회전 함.
+	/** 회전 처리 (카메라 회전). 
+	 *  컨트롤러를 회전 시키면 스프링 암 컴포넌트가 회전 합니다. 
+	 */
 	AddControllerYawInput(RotationValue.X);
 	AddControllerPitchInput(RotationValue.Y);
 }
@@ -322,7 +332,7 @@ void AABCharacterPlayer::QuarterMove(const FInputActionValue& Value)
 
 	// 입력 값을 기반으로 이동 방향 만들기.
 	FVector MoveDirection(Movement.Y, Movement.X, 0.0f);
-	MoveDirection.Normalize(); // 정규화 (벡터 크기 1로 만들기).
+	MoveDirection.Normalize();	// 정규화 (벡터 크기 1로 만들기).
 
 	// 입력 크기 고정 처리 - 대각선 입력이 더 길게 처리되기 때문.
 	float MovementVectorSize = FMath::Min(1.0f, Movement.Size());

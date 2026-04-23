@@ -15,19 +15,19 @@ class ARENABATTLE_API AABFountain : public AActor
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
+	/** Sets default values for this actor's properties */
 	AABFountain();
 
 protected:
-	// Called when the game starts or when spawned
+	/** Called when the game starts or when spawned */
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
+	/** Called every frame */
 	virtual void Tick(float DeltaTime) override;
 
 public:
-	// 컴포넌트 구성.
+	/** 컴포넌트 구성. */
 	UPROPERTY(VisibleAnywhere, Category = "Mesh")
 	TObjectPtr<UStaticMeshComponent> Body;
 

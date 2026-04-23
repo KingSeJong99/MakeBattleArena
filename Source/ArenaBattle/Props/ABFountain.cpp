@@ -19,10 +19,10 @@ AABFountain::AABFountain()
 
 	// Water 컴포넌트는 루트의 하위 컴포넌트로 지정.
 	Water->SetupAttachment(Body);
-	// 하위 컴포넌트 설정한 후에는 상대 위치 설정해주는 게 좋음.
+	// 하위 컴포넌트 설정한 후에는 상대 위치를 설정해주는 게 좋습니다.
 	Water->SetRelativeLocation(FVector(0.0f, 0.0f, 132.0f));
 
-	// 분수대 애셋 검색 후 설정.
+	// 분수대 에셋 검색 후 설정.
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> FountainBodyMesh(
 		TEXT("/Game/ArenaBattle/Environment/Props/SM_Plains_Castle_Fountain_01.SM_Plains_Castle_Fountain_01")
 	);
