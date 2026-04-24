@@ -57,21 +57,21 @@ AABCharacterPlayer::AABCharacterPlayer()
 	} 
 	*/
 
-	// 컴포넌트 생성.
+	/** 컴포넌트 생성. */
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(
 		TEXT("SpringArm"));
-	// 계층 설정 (루트 컴포넌트 아래로).
+	/** 계층 설정 (루트 컴포넌트 아래로). */
 	SpringArm->SetupAttachment(RootComponent);
 	SpringArm->TargetArmLength = 600.0f;
-	// 컨트롤러의 회전 값을 사용할 지 여부.
+	/** 컨트롤러의 회전 값을 사용할 지 여부. */
 	SpringArm->bUsePawnControlRotation = true;
 
-	// 카메라 컴포넌트.
+	/** 카메라 컴포넌트. */
 	Camera = CreateDefaultSubobject<UCameraComponent>(
 		TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
 
-	// 입력 관련 애셋 로드 및 설정.
+	/** 입력 관련 애셋 로드 및 설정. */
 	static ConstructorHelpers::FObjectFinder<UInputAction> ShoulderMoveActionRef(
 		TEXT("/Game/ArenaBattle/Input/Actions/IA_ShoulderMove.IA_ShoulderMove")
 	);
@@ -126,7 +126,7 @@ AABCharacterPlayer::AABCharacterPlayer()
 		AttackAction = AttackActionRef.Object;
 	}
 
-	// 기본 컨트롤 설정.
+	/** 기본 컨트롤 설정. */
 	CurrentCharacterControlType = ECharacterControlType::Shoulder;
 }
 
@@ -134,7 +134,7 @@ void AABCharacterPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// 초기 입력 컨트롤 설정.
+	/** 초기 입력 컨트롤 설정. */
 	SetCharacterControl(CurrentCharacterControlType);
 }
 
@@ -143,13 +143,12 @@ void AABCharacterPlayer::SetupPlayerInputComponent(
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	// 향상된 입력 시스템 컴포넌트를 활용해 바인딩 합니다.
+	/** 향상된 입력 시스템 컴포넌트를 활용해 바인딩 합니다. */
 	UEnhancedInputComponent* EnhancedInputComponent
 		= Cast<UEnhancedInputComponent>(PlayerInputComponent);
 	if (EnhancedInputComponent)
 	{
-		// 입력 바인딩을 통해 이벤트와 실행 함수를 연결합니다.
-		 
+		/** 입력 바인딩을 통해 이벤트와 실행 함수를 연결합니다. */
 		EnhancedInputComponent->BindAction(
 			ShoulderMoveAction,
 			ETriggerEvent::Triggered,
@@ -178,7 +177,7 @@ void AABCharacterPlayer::SetupPlayerInputComponent(
 			&ACharacter::StopJumping
 		);
 
-		// QuarterMove.
+		/** QuarterMove. */
 		EnhancedInputComponent->BindAction(
 			QuarterMoveAction,
 			ETriggerEvent::Triggered,
@@ -186,7 +185,7 @@ void AABCharacterPlayer::SetupPlayerInputComponent(
 			&AABCharacterPlayer::QuarterMove
 		);
 
-		// ChangeControl..
+		/** ChangeControl.. */
 		EnhancedInputComponent->BindAction(
 			ChangeControlAction,
 			ETriggerEvent::Started,
@@ -194,7 +193,7 @@ void AABCharacterPlayer::SetupPlayerInputComponent(
 			&AABCharacterPlayer::ChangeCharacterControl
 		);
 
-		// 공격 입력 액션을 처리합니다.
+		/** 공격 입력 액션을 처리합니다. */
 		EnhancedInputComponent->BindAction(
 			AttackAction,
 			ETriggerEvent::Triggered,
@@ -207,13 +206,12 @@ void AABCharacterPlayer::SetupPlayerInputComponent(
 void AABCharacterPlayer::SetCharacterControl(
 	ECharacterControlType NewCharacterControlType)
 {
-	// 변경할 컨트롤 데이터 애셋을 로드.
+	/** 변경할 컨트롤 데이터 애셋을 로드. */
 	UABCharacterControlData* NewCharacterControl
 		= CharacterControlManager[NewCharacterControlType];
-	// 필수로 있어야 하므로 확인.
 	check(NewCharacterControl);
 
-	// 변경된 속성을 설정.
+	/** 변경된 속성을 설정. */
 	SetCharacterContolData(NewCharacterControl);
 
 	/**
@@ -224,19 +222,19 @@ void AABCharacterPlayer::SetCharacterControl(
 		= Cast<APlayerController>(GetController());
 	if (PlayerController)
 	{
-		// 향상된 입력 시스템의 서브 시스템을 가져옵니다.
+		/** 향상된 입력 시스템의 서브 시스템을 가져옵니다. */
 		UEnhancedInputLocalPlayerSubsystem* InputSystem
 			= ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(
 				PlayerController->GetLocalPlayer()
 			);
 
-		// 향상된 입력 서브 시스템을 얻어온 후에 사용할 매핑 컨텍스트 설정.
+		/** 향상된 입력 서브 시스템을 얻어온 후에 사용할 매핑 컨텍스트 설정. */
 		if (InputSystem)
 		{
-			// 기존에 설정된 매핑 제거.
+			/** 기존에 설정된 매핑 제거. */
 			InputSystem->ClearAllMappings();
 
-			// 새로운 입력 매핑 컨텍스트 추가.
+			/** 새로운 입력 매핑 컨텍스트 추가. */
 			InputSystem->AddMappingContext(
 				NewCharacterControl->InputMappingContext,
 				0
@@ -244,17 +242,17 @@ void AABCharacterPlayer::SetCharacterControl(
 		}
 	}
 
-	// 설정이 모두 끝나면 현재 캐릭터 컨트롤 타입 변경.
+	/** 설정이 모두 끝나면 현재 캐릭터 컨트롤 타입 변경. */
 	CurrentCharacterControlType = NewCharacterControlType;
 }
 
 void AABCharacterPlayer::SetCharacterContolData(
 	const UABCharacterControlData* InCharacterControlData)
 {
-	// 상위 로직 호출.
+	/** 상위 로직 호출. */
 	Super::SetCharacterContolData(InCharacterControlData);
 
-	// 나머지 관련 값 설정.
+	/** 나머지 관련 값 설정. */
 	SpringArm->TargetArmLength
 		= InCharacterControlData->TargetArmLength;
 	SpringArm->SetRelativeRotation(
@@ -274,7 +272,7 @@ void AABCharacterPlayer::SetCharacterContolData(
 
 void AABCharacterPlayer::ChangeCharacterControl()
 {
-	// 사용할 캐릭터 컨트롤 변경.
+	/** 사용할 캐릭터 컨트롤 변경. */
 	if (CurrentCharacterControlType == ECharacterControlType::Quarter)
 	{
 		SetCharacterControl(ECharacterControlType::Shoulder);
@@ -300,22 +298,22 @@ void AABCharacterPlayer::ShoulderMove(const FInputActionValue& Value)
 	FRotator Rotation = GetControlRotation();
 	FRotator YawRotation(0.0f, Rotation.Yaw, 0.0f);
 
-	// 앞방향.
+	/** 앞방향. */
 	FVector ForwardVector
 		= FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 
-	// 오른쪽 방향.
+	/** 오른쪽 방향. */
 	FVector RightVector
 		= FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
-	// 무브먼트 컴포넌트에 입력 전달하기.
+	/** 무브먼트 컴포넌트에 입력 전달하기. */
 	AddMovementInput(ForwardVector, Movement.Y);
 	AddMovementInput(RightVector, Movement.X);
 }
 
 void AABCharacterPlayer::ShoulderLook(const FInputActionValue& Value)
 {
-	// 입력 값 가져오기.
+	/** 입력 값 가져오기. */
 	FVector2D RotationValue = Value.Get<FVector2D>();
 
 	/** 회전 처리 (카메라 회전). 
@@ -327,23 +325,22 @@ void AABCharacterPlayer::ShoulderLook(const FInputActionValue& Value)
 
 void AABCharacterPlayer::QuarterMove(const FInputActionValue& Value)
 {
-	// 입력 값 가져오기.
+	/** 입력 값 가져오기. */
 	FVector2D Movement = Value.Get<FVector2D>();
 
-	// 입력 값을 기반으로 이동 방향 만들기.
+	/** 입력 값을 기반으로 이동 방향 만들기. */
 	FVector MoveDirection(Movement.Y, Movement.X, 0.0f);
 	MoveDirection.Normalize();	// 정규화 (벡터 크기 1로 만들기).
 
-	// 입력 크기 고정 처리 - 대각선 입력이 더 길게 처리되기 때문.
+	/** 입력 크기 고정 처리 - 대각선 입력이 더 길게 처리되기 때문. */
 	float MovementVectorSize = FMath::Min(1.0f, Movement.Size());
 
-	// 회전 처리 (옵션).
+	/** 회전 처리 (옵션). */
 	Controller->SetControlRotation(
-		// 방향 구하는 코드 엄청 어려움.
 		FRotationMatrix::MakeFromX(MoveDirection).Rotator()
 	);
 
-	// 이동 적용.
+	/** 이동 적용. */
 	AddMovementInput(MoveDirection, MovementVectorSize);
 }
 

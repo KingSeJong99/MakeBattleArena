@@ -28,29 +28,29 @@ protected:
 	virtual void SetupPlayerInputComponent(
 		class UInputComponent* PlayerInputComponent) override;
 
-	// 설정된 컨트롤에 따라 입력 매핑 컨텍스트 및 관련 설정 처리 함수.
+	/** 설정된 컨트롤에 따라 입력 매핑 컨텍스트 및 관련 설정 처리 함수. */
 	void SetCharacterControl(
 		ECharacterControlType NewCharacterControlType
 	);
 
-	// 컨트롤 데이터 설정.
+	/** 컨트롤 데이터 설정. */
 	virtual void SetCharacterContolData(
 		const class UABCharacterControlData* InCharacterControlData) override;
 
 protected:
-	// 캐릭터 컨트롤 변경 입력 처리 함수.
+	/** 캐릭터 컨트롤 변경 입력 처리 함수. */
 	void ChangeCharacterControl();
 
-	// 이동 함수.
+	/** 이동 함수. */
 	void ShoulderMove(const FInputActionValue& Value);
 
-	// 회전 함수.
+	/** 회전 함수. */
 	void ShoulderLook(const FInputActionValue& Value);
 
-	// 쿼터뷰일 때 이동 처리 함수.
+	/** 쿼터뷰일 때 이동 처리 함수. */
 	void QuarterMove(const FInputActionValue& Value);
 
-	// 공격 함수.
+	/** 공격 함수. */
 	void Attack();
 
 protected:

@@ -2,8 +2,8 @@
 /shelf/
 /workspace.xml
 # Rider에서 무시된 파일
-/projectSettingsUpdater.xml
 /.idea.ArenaBattle.iml
+/projectSettingsUpdater.xml
 /contentModel.xml
 /modules.xml
 # 에디터 기반 HTTP 클라이언트 요청

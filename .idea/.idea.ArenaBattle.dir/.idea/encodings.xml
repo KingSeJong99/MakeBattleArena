@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="Encoding" addBOMForNewFiles="with BOM under Windows, with no BOM otherwise" />
+  <component name="Encoding" addBOMForNewFiles="with BOM under Windows, with no BOM otherwise">
+    <file url="file://$PROJECT_DIR$/ArenaBattle.uproject" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Source/ArenaBattle/Animation/ABAnimInstance.cpp" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Source/ArenaBattle/Animation/AnimNotify_AttackHitCheck.cpp" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Source/ArenaBattle/Character/ABCharacterBase.cpp" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Source/ArenaBattle/Character/ABCharacterBase.h" charset="EUC-KR" />
+    <file url="file://$PROJECT_DIR$/Source/ArenaBattle/Character/ABCharacterNonPlayer.cpp" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Source/ArenaBattle/Item/ABWeaponItemData.h" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Source/ArenaBattle/UI/ABHpBarWidget.cpp" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Source/ArenaBattle/UI/ABWidgetComponent.cpp" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Source/ArenaBattle/UI/ABWidgetComponent.h" charset="UTF-8" />
+  </component>
 </project>

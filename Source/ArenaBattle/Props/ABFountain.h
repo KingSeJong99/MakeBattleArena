@@ -6,7 +6,6 @@
 #include "GameFramework/Actor.h"
 #include "ABFountain.generated.h"
 
-// 전방 선언.
 class UStaticMeshComponent;
 
 UCLASS()
